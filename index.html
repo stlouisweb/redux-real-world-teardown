@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Redux Real-World Example Project Teardown : ">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Redux Real-World Example Project Teardown</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/stlouisweb/redux-real-world-teardown">View on GitHub</a>
+
+          <h1 id="project_title">Redux Real-World Example Project Teardown</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/stlouisweb/redux-real-world-teardown/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/stlouisweb/redux-real-world-teardown/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a id="project-set-up" class="anchor" href="#project-set-up" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Project set up</h2>
+
+<h3>
+<a id="boilerplate" class="anchor" href="#boilerplate" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Boilerplate</h3>
+
+<p>At the route of the project are the following "boilerplate" files that can be used in your own React-Redux projects in more-less the same form.</p>
+
+<h4>
+<a id="packagejson" class="anchor" href="#packagejson" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>./package.json</h4>
+
+<div class="highlight highlight-source-json"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>redux-real-world-example<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>version<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>0.0.0<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>description<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Redux real-world example<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>scripts<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>start<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>node server.js<span class="pl-pds">"</span></span>
+  },
+  <span class="pl-s"><span class="pl-pds">"</span>repository<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>git<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>https://github.com/reactjs/redux.git<span class="pl-pds">"</span></span>
+  },
+  <span class="pl-s"><span class="pl-pds">"</span>license<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>MIT<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>bugs<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>url<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>https://github.com/reactjs/redux/issues<span class="pl-pds">"</span></span>
+  },
+  <span class="pl-s"><span class="pl-pds">"</span>homepage<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://redux.js.org<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>dependencies<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>babel-polyfill<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^6.3.14<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>humps<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^0.6.0<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>isomorphic-fetch<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^2.1.1<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>lodash<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^4.0.0<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>normalizr<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^2.0.0<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>react<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^0.14.7<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>react-dom<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^0.14.7<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>react-redux<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^4.2.1<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>react-router<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>2.0.0<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>react-router-redux<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^4.0.0-rc.1<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>redux<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^3.2.1<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>redux-logger<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^2.4.0<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>redux-thunk<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^1.0.3<span class="pl-pds">"</span></span>
+  },
+  <span class="pl-s"><span class="pl-pds">"</span>devDependencies<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>babel-core<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^6.3.15<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>babel-loader<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^6.2.0<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>babel-preset-es2015<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^6.3.13<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>babel-preset-react<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^6.3.13<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>babel-preset-react-hmre<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^1.1.1<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>concurrently<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^0.1.1<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>express<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^4.13.3<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>redux-devtools<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^3.1.0<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>redux-devtools-dock-monitor<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^1.0.1<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>redux-devtools-log-monitor<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^1.0.3<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>webpack<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^1.9.11<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>webpack-dev-middleware<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^1.2.0<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>webpack-hot-middleware<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>^2.9.1<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+
+<h4>
+<a id="babelrc" class="anchor" href="#babelrc" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>./.babelrc</h4>
+
+<pre><code>{
+  "presets": ["es2015", "react"],
+  "env": {
+    "development": {
+      "presets": ["react-hmre"]
+    }
+  }
+}
+</code></pre>
+
+<h4>
+<a id="webpackconfigjs" class="anchor" href="#webpackconfigjs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>./webpack.config.js</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> path <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>path<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> webpack <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>webpack<span class="pl-pds">'</span></span>);
+
+<span class="pl-c1">module</span>.<span class="pl-smi">exports</span> <span class="pl-k">=</span> {
+  devtool<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>cheap-module-eval-source-map<span class="pl-pds">'</span></span>,
+  entry<span class="pl-k">:</span> [
+    <span class="pl-s"><span class="pl-pds">'</span>webpack-hot-middleware/client<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>./index<span class="pl-pds">'</span></span>,
+  ],
+  output<span class="pl-k">:</span> {
+    path<span class="pl-k">:</span> <span class="pl-smi">path</span>.<span class="pl-c1">join</span>(<span class="pl-c1">__dirname</span>, <span class="pl-s"><span class="pl-pds">'</span>dist<span class="pl-pds">'</span></span>),
+    filename<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>bundle.js<span class="pl-pds">'</span></span>,
+    publicPath<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>/static/<span class="pl-pds">'</span></span>,
+  },
+  plugins<span class="pl-k">:</span> [
+    <span class="pl-k">new</span> <span class="pl-en">webpack.optimize</span>.<span class="pl-en">OccurenceOrderPlugin</span>(),
+    <span class="pl-k">new</span> <span class="pl-en">webpack.HotModuleReplacementPlugin</span>(),
+  ],
+  module<span class="pl-k">:</span> {
+    loaders<span class="pl-k">:</span> [
+      {
+        test<span class="pl-k">:</span><span class="pl-sr"> <span class="pl-pds">/</span><span class="pl-cce">\.</span>js<span class="pl-k">$</span><span class="pl-pds">/</span></span>,
+        loaders<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>babel<span class="pl-pds">'</span></span>],
+        exclude<span class="pl-k">:</span><span class="pl-sr"> <span class="pl-pds">/</span>node_modules<span class="pl-pds">/</span></span>,
+        include<span class="pl-k">:</span> <span class="pl-c1">__dirname</span>,
+      },
+    ],
+  },
+};</pre></div>
+
+<h4>
+<a id="indexhtml" class="anchor" href="#indexhtml" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>./index.html</h4>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;!DOCTYPE html&gt;
+&lt;<span class="pl-ent">html</span>&gt;
+  &lt;<span class="pl-ent">head</span>&gt;
+    &lt;<span class="pl-ent">title</span>&gt;Redux real-world example&lt;/<span class="pl-ent">title</span>&gt;
+  &lt;/<span class="pl-ent">head</span>&gt;
+  &lt;<span class="pl-ent">body</span>&gt;
+    &lt;<span class="pl-ent">div</span> <span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>root<span class="pl-pds">"</span></span>&gt;
+    &lt;/<span class="pl-ent">div</span>&gt;
+<span class="pl-s1">    &lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>/static/bundle.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</span>
+  &lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+
+<h4>
+<a id="indexjs" class="anchor" href="#indexjs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>./index.js</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">'</span>babel-polyfill<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> <span class="pl-smi">React</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> { <span class="pl-smi">render</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react-dom<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> { <span class="pl-smi">browserHistory</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react-router<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> { <span class="pl-smi">syncHistoryWithStore</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react-router-redux<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> <span class="pl-smi">Root</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>./containers/Root<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> <span class="pl-smi">configureStore</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>./store/configureStore<span class="pl-pds">'</span></span>;
+
+<span class="pl-k">const</span> <span class="pl-c1">store</span> <span class="pl-k">=</span> <span class="pl-en">configureStore</span>();
+<span class="pl-k">const</span> <span class="pl-c1">history</span> <span class="pl-k">=</span> <span class="pl-en">syncHistoryWithStore</span>(browserHistory, store);
+
+<span class="pl-en">render</span>(
+  <span class="pl-k">&lt;</span>Root store<span class="pl-k">=</span>{store} history<span class="pl-k">=</span>{history} <span class="pl-k">/</span><span class="pl-k">&gt;</span>,
+  <span class="pl-c1">document</span>.<span class="pl-c1">getElementById</span>(<span class="pl-s"><span class="pl-pds">'</span>root<span class="pl-pds">'</span></span>)
+);
+</pre></div>
+
+<h4>
+<a id="serverjs" class="anchor" href="#serverjs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>server.js</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> webpack <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>webpack<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> webpackDevMiddleware <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>webpack-dev-middleware<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> webpackHotMiddleware <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>webpack-hot-middleware<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> config <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>./webpack.config<span class="pl-pds">'</span></span>);
+
+<span class="pl-k">var</span> app <span class="pl-k">=</span> <span class="pl-k">new</span> (<span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>express<span class="pl-pds">'</span></span>))();
+<span class="pl-k">var</span> port <span class="pl-k">=</span> <span class="pl-c1">3000</span>;
+
+<span class="pl-k">var</span> compiler <span class="pl-k">=</span> <span class="pl-en">webpack</span>(config);
+<span class="pl-smi">app</span>.<span class="pl-en">use</span>(<span class="pl-en">webpackDevMiddleware</span>(compiler, { noInfo<span class="pl-k">:</span> <span class="pl-c1">true</span>, publicPath<span class="pl-k">:</span> <span class="pl-smi">config</span>.<span class="pl-smi">output</span>.<span class="pl-smi">publicPath</span> }));
+<span class="pl-smi">app</span>.<span class="pl-en">use</span>(<span class="pl-en">webpackHotMiddleware</span>(compiler));
+
+<span class="pl-smi">app</span>.<span class="pl-en">use</span>(<span class="pl-k">function</span> (<span class="pl-smi">req</span>, <span class="pl-smi">res</span>) {
+  <span class="pl-smi">res</span>.<span class="pl-en">sendFile</span>(<span class="pl-c1">__dirname</span> <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>/index.html<span class="pl-pds">'</span></span>);
+});
+
+<span class="pl-smi">app</span>.<span class="pl-en">listen</span>(port, <span class="pl-k">function</span> (<span class="pl-smi">error</span>) {
+  <span class="pl-k">if</span> (error) {
+    <span class="pl-en">console</span>.<span class="pl-c1">error</span>(error);
+  } <span class="pl-k">else</span> {
+    <span class="pl-en">console</span>.<span class="pl-c1">info</span>(<span class="pl-s"><span class="pl-pds">'</span>==&gt; 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.<span class="pl-pds">'</span></span>,
+    port, port);
+  }
+});
+</pre></div>
+
+<h4>
+<a id="routesjs" class="anchor" href="#routesjs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>routes.js</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> <span class="pl-smi">React</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> { <span class="pl-smi">Route</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>react-router<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">App</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>./containers/App<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">UserPage</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>./containers/UserPage<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">RepoPage</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>./containers/RepoPage<span class="pl-pds">'</span></span>
+
+<span class="pl-k">export</span> <span class="pl-v">default</span> (
+  <span class="pl-k">&lt;</span>Route path<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> component<span class="pl-k">=</span>{App}<span class="pl-k">&gt;</span>
+    <span class="pl-k">&lt;</span>Route path<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>/:login/:name<span class="pl-pds">"</span></span>
+           component<span class="pl-k">=</span>{RepoPage} <span class="pl-k">/</span><span class="pl-k">&gt;</span>
+    <span class="pl-k">&lt;</span>Route path<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>/:login<span class="pl-pds">"</span></span>
+           component<span class="pl-k">=</span>{UserPage} <span class="pl-k">/</span><span class="pl-k">&gt;</span>
+  <span class="pl-k">&lt;</span><span class="pl-k">/</span>Route<span class="pl-k">&gt;</span>
+)
+</pre></div>
+
+<p>You'll see some project specific routes in routes.js.</p>
+
+<hr>
+
+<h3>
+<a id="directory-structure" class="anchor" href="#directory-structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Directory Structure</h3>
+
+<pre><code>real-world/
+ |---- actions/
+ |---- components/
+ |---- containers/
+ |---- middleware/
+ |---- reducers/
+ |---- store/
+ |---- .babelrc
+ |---- index.html
+ |---- index.js
+ |---- package.json
+ |---- routes.js
+ |---- server.js
+ |---- webpack.config.js
+
+</code></pre>
+
+<hr>
+
+<h3>
+<a id="configuring-the-store" class="anchor" href="#configuring-the-store" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring the store</h3>
+
+<p>Redux uses a single "Store", heres how they set it up:</p>
+
+<pre><code>real-world/
+...
+|---- reducers/
+|---- store/
+      |---- configureStore.js
+      |---- congifureStore.dev.js
+      |---- configureStore.prod.js
+...
+</code></pre>
+
+<p>The configureStore.js file simply checks if the environment is labeled production, and if so requires the configureStore.prod.js configuration, otherwise it loads configureStore.dev.js. The primary difference between prod and dev is more logging and hot module replacement in dev.</p>
+
+<h4>
+<a id="configurestorejs" class="anchor" href="#configurestorejs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>configureStore.js</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">if</span> (<span class="pl-c1">process</span>.<span class="pl-smi">env</span>.<span class="pl-c1">NODE_ENV</span> <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">'</span>production<span class="pl-pds">'</span></span>) {
+  <span class="pl-c1">module</span>.<span class="pl-smi">exports</span> <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>./configureStore.prod<span class="pl-pds">'</span></span>)
+} <span class="pl-k">else</span> {
+  <span class="pl-c1">module</span>.<span class="pl-smi">exports</span> <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>./configureStore.dev<span class="pl-pds">'</span></span>)
+}</pre></div>
+
+<h4>
+<a id="configurestoredevjs" class="anchor" href="#configurestoredevjs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>configureStore.dev.js</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> { <span class="pl-smi">createStore</span>, <span class="pl-smi">applyMiddleware</span>, <span class="pl-smi">compose</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>redux<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">thunk</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>redux-thunk<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">createLogger</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>redux-logger<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">api</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>../middleware/api<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">rootReducer</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>../reducers<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">DevTools</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>../containers/DevTools<span class="pl-pds">'</span></span>
+
+<span class="pl-k">export</span> <span class="pl-v">default</span> <span class="pl-k">function</span> <span class="pl-en">configureStore</span>(<span class="pl-smi">initialState</span>) {
+  <span class="pl-k">const</span> <span class="pl-c1">store</span> <span class="pl-k">=</span> <span class="pl-en">createStore</span>(
+    rootReducer,
+    initialState,
+    <span class="pl-en">compose</span>(
+      <span class="pl-en">applyMiddleware</span>(thunk, api, <span class="pl-en">createLogger</span>()),
+      <span class="pl-smi">DevTools</span>.<span class="pl-en">instrument</span>()
+    )
+  )
+
+  <span class="pl-k">if</span> (<span class="pl-c1">module</span>.<span class="pl-smi">hot</span>) {
+    <span class="pl-c">// Enable Webpack hot module replacement for reducers</span>
+    <span class="pl-c1">module</span>.<span class="pl-smi">hot</span>.<span class="pl-c1">accept</span>(<span class="pl-s"><span class="pl-pds">'</span>../reducers<span class="pl-pds">'</span></span>, () <span class="pl-k">=&gt;</span> {
+      <span class="pl-k">const</span> <span class="pl-c1">nextRootReducer</span> <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>../reducers<span class="pl-pds">'</span></span>).<span class="pl-smi">default</span>
+      <span class="pl-smi">store</span>.<span class="pl-en">replaceReducer</span>(nextRootReducer)
+    })
+  }
+
+  <span class="pl-k">return</span> store
+}</pre></div>
+
+<h4>
+<a id="configurestoreprodjs" class="anchor" href="#configurestoreprodjs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>configureStore.prod.js</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> { <span class="pl-smi">createStore</span>, <span class="pl-smi">applyMiddleware</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>redux<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">thunk</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>redux-thunk<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">api</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>../middleware/api<span class="pl-pds">'</span></span>
+<span class="pl-k">import</span> <span class="pl-smi">rootReducer</span> <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>../reducers<span class="pl-pds">'</span></span>
+
+<span class="pl-k">export</span> <span class="pl-v">default</span> <span class="pl-k">function</span> <span class="pl-en">configureStore</span>(<span class="pl-smi">initialState</span>) {
+  <span class="pl-k">return</span> <span class="pl-en">createStore</span>(
+    rootReducer,
+    initialState,
+    <span class="pl-en">applyMiddleware</span>(thunk, api)
+  )
+}
+</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Redux Real-World Example Project Teardown maintained by <a href="https://github.com/stlouisweb">stlouisweb</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
