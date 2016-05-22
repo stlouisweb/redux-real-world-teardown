@@ -19,7 +19,9 @@
     </section>
 
     <section class="main-content">
-      <h2>
+      <p>Here is a walk-through of the <a href="https://github.com/reactjs/redux/tree/master/examples/real-world">Real-World example Redux project</a>.</p>
+
+<h2>
 <a id="project-set-up" class="anchor" href="#project-set-up" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Project set up</h2>
 
 <h3>
@@ -234,9 +236,159 @@
 <hr>
 
 <h3>
+<a id="accessing-the-github-api" class="anchor" href="#accessing-the-github-api" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Accessing the Github API</h3>
+
+<p>The middleware directory is project specific, in this case, we'll be interacting with the Github API to query for users and get a list of repositories they follow.</p>
+
+<pre><code>real-world/
+...
+|---- middleware/
+      |---- api.js
+...
+</code></pre>
+
+<h4>
+<a id="apijs" class="anchor" href="#apijs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>api.js</h4>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">import</span> { <span class="pl-smi">Schema</span>, <span class="pl-smi">arrayOf</span>, <span class="pl-smi">normalize</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>normalizr<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> { <span class="pl-smi">camelizeKeys</span> } <span class="pl-k">from</span> <span class="pl-s"><span class="pl-pds">'</span>humps<span class="pl-pds">'</span></span>;
+<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">'</span>isomorphic-fetch<span class="pl-pds">'</span></span>;
+
+<span class="pl-c">// Extracts the next page URL from Github API response.</span>
+<span class="pl-k">function</span> <span class="pl-en">getNextPageUrl</span>(<span class="pl-smi">response</span>) {
+  <span class="pl-k">const</span> <span class="pl-c1">link</span> <span class="pl-k">=</span> <span class="pl-smi">response</span>.<span class="pl-c1">headers</span>.<span class="pl-en">get</span>(<span class="pl-s"><span class="pl-pds">'</span>link<span class="pl-pds">'</span></span>);
+  <span class="pl-k">if</span> (<span class="pl-k">!</span>link) {
+    <span class="pl-k">return</span> <span class="pl-c1">null</span>;
+  }
+
+  <span class="pl-k">const</span> <span class="pl-c1">nextLink</span> <span class="pl-k">=</span> <span class="pl-smi">link</span>.<span class="pl-c1">split</span>(<span class="pl-s"><span class="pl-pds">'</span>,<span class="pl-pds">'</span></span>).<span class="pl-c1">find</span>(<span class="pl-smi">s</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">s</span>.<span class="pl-c1">indexOf</span>(<span class="pl-s"><span class="pl-pds">'</span>rel="next"<span class="pl-pds">'</span></span>) <span class="pl-k">&gt;</span> <span class="pl-k">-</span><span class="pl-c1">1</span>);
+  <span class="pl-k">if</span> (<span class="pl-k">!</span>nextLink) {
+    <span class="pl-k">return</span> <span class="pl-c1">null</span>;
+  }
+
+  <span class="pl-k">return</span> <span class="pl-smi">nextLink</span>.<span class="pl-c1">split</span>(<span class="pl-s"><span class="pl-pds">'</span>;<span class="pl-pds">'</span></span>)[<span class="pl-c1">0</span>].<span class="pl-c1">slice</span>(<span class="pl-c1">1</span>, <span class="pl-k">-</span><span class="pl-c1">1</span>);
+}
+
+<span class="pl-k">const</span> <span class="pl-c1">API_ROOT</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>https://api.github.com/<span class="pl-pds">'</span></span>;
+
+<span class="pl-c">// Fetches an API response and normalizes the result JSON according to the schema.</span>
+<span class="pl-c">// This makes every API response have the same shape, regardless of how nested it was.</span>
+<span class="pl-k">function</span> <span class="pl-en">callApi</span>(<span class="pl-smi">endpoint</span>, <span class="pl-smi">schema</span>) {
+  <span class="pl-k">const</span> <span class="pl-c1">fullUrl</span> <span class="pl-k">=</span> (<span class="pl-smi">endpoint</span>.<span class="pl-c1">indexOf</span>(<span class="pl-c1">API_ROOT</span>) <span class="pl-k">===</span> <span class="pl-k">-</span><span class="pl-c1">1</span>) <span class="pl-k">?</span> <span class="pl-c1">API_ROOT</span> <span class="pl-k">+</span> endpoint <span class="pl-k">:</span> endpoint;
+
+  <span class="pl-k">return</span> <span class="pl-en">fetch</span>(fullUrl)
+    .<span class="pl-en">then</span>(<span class="pl-smi">response</span> <span class="pl-k">=&gt;</span>
+      <span class="pl-smi">response</span>.<span class="pl-en">json</span>().<span class="pl-en">then</span>(<span class="pl-smi">json</span> <span class="pl-k">=&gt;</span> ({ json, response }))
+    ).<span class="pl-en">then</span>(({ json, response }) <span class="pl-k">=&gt;</span> {
+      <span class="pl-k">if</span> (<span class="pl-k">!</span><span class="pl-smi">response</span>.<span class="pl-smi">ok</span>) {
+        <span class="pl-k">return</span> <span class="pl-smi">Promise</span>.<span class="pl-en">reject</span>(json);
+      }
+
+      <span class="pl-k">const</span> <span class="pl-c1">camelizedJson</span> <span class="pl-k">=</span> <span class="pl-en">camelizeKeys</span>(json);
+      <span class="pl-k">const</span> <span class="pl-c1">nextPageUrl</span> <span class="pl-k">=</span> <span class="pl-en">getNextPageUrl</span>(response);
+
+      <span class="pl-k">return</span> <span class="pl-c1">Object</span>.<span class="pl-en">assign</span>({},
+        <span class="pl-en">normalize</span>(camelizedJson, schema),
+        { nextPageUrl }
+      );
+    });
+}
+
+<span class="pl-c">// We use this Normalizr schemas to transform API responses from a nested form</span>
+<span class="pl-c">// to a flat form where repos and users are placed in `entities`, and nested</span>
+<span class="pl-c">// JSON objects are replaced with their IDs. This is very convenient for</span>
+<span class="pl-c">// consumption by reducers, because we can easily build a normalized tree</span>
+<span class="pl-c">// and keep it updated as we fetch more data.</span>
+
+<span class="pl-c">// Read more about Normalizr: https://github.com/gaearon/normalizr</span>
+
+<span class="pl-c">// GitHub's API may return results with uppercase letters while the query</span>
+<span class="pl-c">// doesn't contain any. For example, "someuser" could result in "SomeUser"</span>
+<span class="pl-c">// leading to a frozen UI as it wouldn't find "someuser" in the entities.</span>
+<span class="pl-c">// That's why we're forcing lower cases down there.</span>
+
+<span class="pl-k">const</span> <span class="pl-c1">userSchema</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Schema</span>(<span class="pl-s"><span class="pl-pds">'</span>users<span class="pl-pds">'</span></span>, {
+  <span class="pl-en">idAttribute</span><span class="pl-k">:</span> <span class="pl-smi">user</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">user</span>.<span class="pl-smi">login</span>.<span class="pl-c1">toLowerCase</span>(),
+});
+
+<span class="pl-k">const</span> <span class="pl-c1">repoSchema</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Schema</span>(<span class="pl-s"><span class="pl-pds">'</span>repos<span class="pl-pds">'</span></span>, {
+  <span class="pl-en">idAttribute</span><span class="pl-k">:</span> <span class="pl-smi">repo</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">repo</span>.<span class="pl-smi">fullName</span>.<span class="pl-c1">toLowerCase</span>(),
+});
+
+<span class="pl-smi">repoSchema</span>.<span class="pl-en">define</span>({
+  owner<span class="pl-k">:</span> userSchema,
+});
+
+<span class="pl-c">// Schemas for Github API responses.</span>
+<span class="pl-k">export</span> <span class="pl-k">const</span> <span class="pl-c1">Schemas</span> <span class="pl-k">=</span> {
+  USER<span class="pl-k">:</span> userSchema,
+  USER_ARRAY<span class="pl-k">:</span> <span class="pl-en">arrayOf</span>(userSchema),
+  REPO<span class="pl-k">:</span> repoSchema,
+  REPO_ARRAY<span class="pl-k">:</span> <span class="pl-en">arrayOf</span>(repoSchema),
+};
+
+<span class="pl-c">// Action key that carries API call info interpreted by this Redux middleware.</span>
+<span class="pl-k">export</span> <span class="pl-k">const</span> <span class="pl-c1">CALL_API</span> <span class="pl-k">=</span> <span class="pl-c1">Symbol</span>(<span class="pl-s"><span class="pl-pds">'</span>Call API<span class="pl-pds">'</span></span>);
+
+<span class="pl-c">// A Redux middleware that interprets actions with CALL_API info specified.</span>
+<span class="pl-c">// Performs the call and promises when such actions are dispatched.</span>
+<span class="pl-k">export</span> <span class="pl-v">default</span> <span class="pl-smi">store</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">next</span> <span class="pl-k">=&gt;</span> <span class="pl-smi">action</span> <span class="pl-k">=&gt;</span> {
+  <span class="pl-k">const</span> <span class="pl-c1">callAPI</span> <span class="pl-k">=</span> action[<span class="pl-c1">CALL_API</span>];
+  <span class="pl-k">if</span> (<span class="pl-k">typeof</span> callAPI <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">'</span>undefined<span class="pl-pds">'</span></span>) {
+    <span class="pl-k">return</span> <span class="pl-en">next</span>(action);
+  }
+
+  <span class="pl-k">let</span> { endpoint } <span class="pl-k">=</span> callAPI;
+  <span class="pl-k">const</span> { <span class="pl-c1">schema</span>, <span class="pl-c1">types</span> } <span class="pl-k">=</span> callAPI;
+
+  <span class="pl-k">if</span> (<span class="pl-k">typeof</span> endpoint <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">'</span>function<span class="pl-pds">'</span></span>) {
+    endpoint <span class="pl-k">=</span> <span class="pl-en">endpoint</span>(<span class="pl-smi">store</span>.<span class="pl-en">getState</span>());
+  }
+
+  <span class="pl-k">if</span> (<span class="pl-k">typeof</span> endpoint <span class="pl-k">!==</span> <span class="pl-s"><span class="pl-pds">'</span>string<span class="pl-pds">'</span></span>) {
+    <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">Error</span>(<span class="pl-s"><span class="pl-pds">'</span>Specify a string endpoint URL.<span class="pl-pds">'</span></span>);
+  }
+
+  <span class="pl-k">if</span> (<span class="pl-k">!</span>schema) {
+    <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">Error</span>(<span class="pl-s"><span class="pl-pds">'</span>Specify one of the exported Schemas.<span class="pl-pds">'</span></span>);
+  }
+
+  <span class="pl-k">if</span> (<span class="pl-k">!</span><span class="pl-c1">Array</span>.<span class="pl-en">isArray</span>(types) <span class="pl-k">||</span> <span class="pl-smi">types</span>.<span class="pl-c1">length</span> <span class="pl-k">!==</span> <span class="pl-c1">3</span>) {
+    <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">Error</span>(<span class="pl-s"><span class="pl-pds">'</span>Expected an array of three action types.<span class="pl-pds">'</span></span>);
+  }
+
+  <span class="pl-k">if</span> (<span class="pl-k">!</span><span class="pl-smi">types</span>.<span class="pl-en">every</span>(<span class="pl-smi">type</span> <span class="pl-k">=&gt;</span> <span class="pl-k">typeof</span> type <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">'</span>string<span class="pl-pds">'</span></span>)) {
+    <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">Error</span>(<span class="pl-s"><span class="pl-pds">'</span>Expected action types to be strings.<span class="pl-pds">'</span></span>);
+  }
+
+  <span class="pl-k">function</span> <span class="pl-en">actionWith</span>(<span class="pl-smi">data</span>) {
+    <span class="pl-k">const</span> <span class="pl-c1">finalAction</span> <span class="pl-k">=</span> <span class="pl-c1">Object</span>.<span class="pl-en">assign</span>({}, action, data);
+    <span class="pl-k">delete</span> finalAction[<span class="pl-c1">CALL_API</span>];
+    <span class="pl-k">return</span> finalAction;
+  }
+
+  <span class="pl-k">const</span> [<span class="pl-c1">requestType</span>, <span class="pl-c1">successType</span>, <span class="pl-c1">failureType</span>] <span class="pl-k">=</span> types;
+  <span class="pl-en">next</span>(<span class="pl-en">actionWith</span>({ type<span class="pl-k">:</span> requestType }));
+
+  <span class="pl-k">return</span> <span class="pl-en">callApi</span>(endpoint, schema).<span class="pl-en">then</span>(
+    <span class="pl-smi">response</span> <span class="pl-k">=&gt;</span> <span class="pl-en">next</span>(<span class="pl-en">actionWith</span>({
+      response,
+      type<span class="pl-k">:</span> successType,
+    })),
+    <span class="pl-smi">error</span> <span class="pl-k">=&gt;</span> <span class="pl-en">next</span>(<span class="pl-en">actionWith</span>({
+      type<span class="pl-k">:</span> failureType,
+      error<span class="pl-k">:</span> <span class="pl-smi">error</span>.<span class="pl-smi">message</span> <span class="pl-k">||</span> <span class="pl-s"><span class="pl-pds">'</span>Something bad happened<span class="pl-pds">'</span></span>,
+    }))
+  );
+};
+</pre></div>
+
+<hr>
+
+<h3>
 <a id="configuring-the-store" class="anchor" href="#configuring-the-store" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring the store</h3>
 
-<p>Redux uses a single "Store", heres how they set it up:</p>
+<p>Redux uses a single "Store", here's how they set it up:</p>
 
 <pre><code>real-world/
 ...
@@ -306,6 +458,8 @@
   )
 }
 </pre></div>
+
+<hr>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/stlouisweb/redux-real-world-teardown">Redux Real-World Example Project Teardown</a> is maintained by <a href="https://github.com/stlouisweb">stlouisweb</a>.</span>
